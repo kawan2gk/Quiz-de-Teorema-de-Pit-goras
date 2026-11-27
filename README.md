@@ -1,1 +1,1 @@
-# Quiz-de-Teorema-de-Pit-goras
+# Quiz-de-Teorema-de-Pitagoras
