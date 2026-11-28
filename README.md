@@ -2,7 +2,7 @@
 
 Trilha de Desenvolvimento Mobile
 Grupo: Gabriel Kawan Mendes Macedo
-       Ariadne Diniz Macedo Mendes
+       Ariadne Macedo Diniz Mendes
 
        Realizamos um quiz sobre teorema de pitagoras. 
        Perguntamos sobre a formula do teorema de pitagoras
