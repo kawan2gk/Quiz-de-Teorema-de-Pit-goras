@@ -1,39 +1,42 @@
 
 import 'dart:io';
 
+
 void main() {
+
   print('======================================');
   print('          QUIZ MATEMÁTICO');
   print('       DESAFIO DE PITÁGORAS');
   print('======================================');
 
-  // Lista que armazena o ranking dos jogadores
+  // Lista de jogadores e pontuações
   List<Map<String, dynamic>> ranking = [];
 
+  // Primeiro jogador
   String nome = solicitarNome();
+
   bool continuar = true;
 
+  // Menu principal
   while (continuar) {
 
-    // Executar o quiz e receber a pontuação
-    int pontos = executarQuiz(nome);
-
-    // Registrar a pontuação no ranking
-    registrarPontuacao(ranking, nome, pontos);
-
-    // Menu principal
     print('\n======================================');
-    print('               MENU');
+    print('             MENU PRINCIPAL');
     print('======================================');
-    print('1 - Jogar novamente');
+    print('Jogador atual: $nome');
+    print('--------------------------------------');
+    print('1 - Jogar');
     print('2 - Adicionar novo jogador');
     print('3 - Ver ranking');
     print('4 - Encerrar o jogo');
+    print('======================================');
 
     String opcao = '';
 
+    // Validar escolha
     while (!['1', '2', '3', '4'].contains(opcao)) {
-      stdout.write('\nEscolha uma opção: ');
+
+      stdout.write('Escolha uma opção: ');
 
       opcao = (stdin.readLineSync() ?? '').trim();
 
@@ -42,30 +45,52 @@ void main() {
       }
     }
 
+    // OPÇÃO 1 - JOGAR
     if (opcao == '1') {
 
-      print('\nVamos jogar novamente, $nome!');
+      int pontos = executarQuiz(nome);
 
-    } else if (opcao == '2') {
+      registrarPontuacao(ranking, nome, pontos);
+
+    }
+
+    // OPÇÃO 2 - NOVO JOGADOR
+    else if (opcao == '2') {
 
       nome = solicitarNome();
 
-    } else if (opcao == '3') {
+      print('\nJogador alterado com sucesso!');
+      print('Agora é a vez de $nome!');
+
+    }
+
+    // OPÇÃO 3 - VER RANKING
+    else if (opcao == '3') {
 
       mostrarRanking(ranking);
 
-    } else if (opcao == '4') {
+      print('\nRetornando ao menu principal...');
+
+    }
+
+    // OPÇÃO 4 - ENCERRAR
+    else if (opcao == '4') {
 
       mostrarRanking(ranking);
+
+      print('\n======================================');
+      print('       JOGO ENCERRADO!');
+      print('======================================');
+      print('Obrigado por participar!');
 
       continuar = false;
 
-      print('\nObrigado por participar do Quiz!');
-      print('Até a próxima!');
-
     }
+
   }
+
 }
+
 
 // Solicitar nome do jogador
 String solicitarNome() {
