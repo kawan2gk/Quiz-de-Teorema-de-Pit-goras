@@ -2,25 +2,96 @@
 import 'dart:io';
 
 void main() {
-
   print('======================================');
-  print('       QUIZ MATEMÁTICO');
-  print('    DESAFIO DE PITÁGORAS');
+  print('          QUIZ MATEMÁTICO');
+  print('       DESAFIO DE PITÁGORAS');
   print('======================================');
 
-  print('\nSeja bem-vindo ao desafio!');
-  print('Teste seus conhecimentos matemáticos!\n');
+  // Lista que armazena o ranking dos jogadores
+  List<Map<String, dynamic>> ranking = [];
 
-  // Identificação do jogador
-  stdout.write('Digite seu nome: ');
-  String nome = stdin.readLineSync() ?? '';
+  String nome = solicitarNome();
+  bool continuar = true;
 
-  print('\nOlá, $nome! Prepare-se para começar!\n');
+  while (continuar) {
 
-  // Lista de perguntas
+    // Executar o quiz e receber a pontuação
+    int pontos = executarQuiz(nome);
+
+    // Registrar a pontuação no ranking
+    registrarPontuacao(ranking, nome, pontos);
+
+    // Menu principal
+    print('\n======================================');
+    print('               MENU');
+    print('======================================');
+    print('1 - Jogar novamente');
+    print('2 - Adicionar novo jogador');
+    print('3 - Ver ranking');
+    print('4 - Encerrar o jogo');
+
+    String opcao = '';
+
+    while (!['1', '2', '3', '4'].contains(opcao)) {
+      stdout.write('\nEscolha uma opção: ');
+
+      opcao = (stdin.readLineSync() ?? '').trim();
+
+      if (!['1', '2', '3', '4'].contains(opcao)) {
+        print('Opção inválida! Digite 1, 2, 3 ou 4.');
+      }
+    }
+
+    if (opcao == '1') {
+
+      print('\nVamos jogar novamente, $nome!');
+
+    } else if (opcao == '2') {
+
+      nome = solicitarNome();
+
+    } else if (opcao == '3') {
+
+      mostrarRanking(ranking);
+
+    } else if (opcao == '4') {
+
+      mostrarRanking(ranking);
+
+      continuar = false;
+
+      print('\nObrigado por participar do Quiz!');
+      print('Até a próxima!');
+
+    }
+  }
+}
+
+// Solicitar nome do jogador
+String solicitarNome() {
+  String nome = '';
+
+  while (nome.isEmpty) {
+    stdout.write('\nDigite o nome do jogador: ');
+
+    nome = (stdin.readLineSync() ?? '').trim();
+
+    if (nome.isEmpty) {
+      print('O nome não pode ficar vazio!');
+    }
+  }
+
+  print('\nOlá, $nome! Prepare-se para começar!');
+
+  return nome;
+}
+
+// Executar o Quiz
+int executarQuiz(String nome) {
+
   List<Map<String, dynamic>> perguntas = [
 
-    { 
+    {
       'pergunta': '1. Qual é a fórmula do Teorema de Pitágoras?',
       'alternativas': [
         'A) a + b = c',
@@ -32,7 +103,7 @@ void main() {
     },
 
     {
-      'pergunta': '2. Um triângulo possui catetos de 3 cm e 4 cm. Qual é a hipotenusa?',
+      'pergunta': '2. Catetos de 3 cm e 4 cm. Qual é a hipotenusa?',
       'alternativas': [
         'A) 5 cm',
         'B) 6 cm',
@@ -43,7 +114,7 @@ void main() {
     },
 
     {
-      'pergunta': '3. Os catetos medem 6 cm e 8 cm. Qual é a hipotenusa?',
+      'pergunta': '3. Catetos de 6 cm e 8 cm. Qual é a hipotenusa?',
       'alternativas': [
         'A) 9 cm',
         'B) 10 cm',
@@ -54,7 +125,7 @@ void main() {
     },
 
     {
-      'pergunta': '4. Uma escada de 13 m está a 5 m da parede. Qual altura ela alcança?',
+      'pergunta': '4. Uma escada de 13 m está a 5 m da parede. Qual altura alcança?',
       'alternativas': [
         'A) 8 m',
         'B) 10 m',
@@ -79,7 +150,7 @@ void main() {
 
   int acertos = 0;
 
-  // Percorrer a lista de perguntas
+  // Percorrer as perguntas
   for (int i = 0; i < perguntas.length; i++) {
 
     print('\n======================================');
@@ -110,16 +181,15 @@ void main() {
     // Verificar resposta
     if (resposta == perguntas[i]['correta']) {
 
-      print('\nMuito bem, $nome! Resposta correta!');
+      print('\nParabéns, $nome! Você acertou!');
       acertos++;
 
     } else {
 
       print('\nResposta incorreta!');
-      print('A resposta correta era: ${perguntas[i]['correta']}');
+      print('A alternativa correta era: ${perguntas[i]['correta']}');
 
     }
-
   }
 
   // Resultado final
@@ -130,7 +200,6 @@ void main() {
   print('Jogador: $nome');
   print('Acertos: $acertos de ${perguntas.length}');
 
-  // Mensagem conforme pontuação
   if (acertos == 5) {
 
     print('Excelente! Você é um mestre de Pitágoras!');
@@ -141,14 +210,100 @@ void main() {
 
   } else if (acertos >= 1) {
 
-    print('Continue praticando! Você consegue melhorar!');
+    print('Continue praticando!');
 
   } else {
 
-    print('Não desanime! Revise o conteúdo e tente novamente!');
+    print('Não desanime! Continue estudando!');
 
   }
 
-  print('\nObrigado por participar do Quiz Matemático!');
+  // Retornar pontuação para o ranking
+  return acertos;
+}
 
+// Registrar pontuação no ranking
+void registrarPontuacao(
+    List<Map<String, dynamic>> ranking,
+    String nome,
+    int pontos) {
+
+  // Verificar se o jogador já existe
+  int indice = ranking.indexWhere(
+    (jogador) =>
+        jogador['nome'].toString().toLowerCase() ==
+        nome.toLowerCase()
+  );
+
+  if (indice == -1) {
+
+    // Cadastrar novo jogador
+    ranking.add({
+      'nome': nome,
+      'pontos': pontos
+    });
+
+  } else {
+
+    // Atualizar somente se conseguir uma pontuação maior
+    if (pontos > ranking[indice]['pontos']) {
+
+      ranking[indice]['pontos'] = pontos;
+
+    }
+
+  }
+
+  print('\nPontuação registrada no ranking!');
+}
+
+// Mostrar ranking
+void mostrarRanking(List<Map<String, dynamic>> ranking) {
+
+  print('\n======================================');
+  print('          RANKING GERAL');
+  print('======================================');
+
+  if (ranking.isEmpty) {
+
+    print('Nenhum jogador cadastrado ainda.');
+    return;
+
+  }
+
+  // Ordenar da maior para a menor pontuação
+  ranking.sort((a, b) =>
+      b['pontos'].compareTo(a['pontos']));
+
+  int posicao = 0;
+  int pontuacaoAnterior = -1;
+
+  for (int i = 0; i < ranking.length; i++) {
+
+    int pontos = ranking[i]['pontos'];
+
+    // Empatados recebem a mesma posição
+    if (pontos != pontuacaoAnterior) {
+      posicao = i + 1;
+    }
+
+    pontuacaoAnterior = pontos;
+
+    String medalha = '';
+
+    if (posicao == 1) {
+      medalha = ' OURO';
+    } else if (posicao == 2) {
+      medalha = ' PRATA';
+    } else if (posicao == 3) {
+      medalha = ' BRONZE';
+    }
+
+    print(
+      '$posicaoº - ${ranking[i]['nome']}'
+      ' | $pontos de 5 pontos$medalha'
+    );
+  }
+
+  print('======================================');
 }
