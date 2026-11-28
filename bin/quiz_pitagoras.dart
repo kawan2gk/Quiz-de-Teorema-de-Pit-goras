@@ -1,4 +1,8 @@
 
+// Desenvolvimento Mobile
+// Gabriel Kawan Mendes Macedo
+// Ariadne Macedo Diniz Mendes
+
 import 'dart:io';
 
 
